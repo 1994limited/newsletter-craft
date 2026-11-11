@@ -54,6 +54,13 @@
         <input type="text" id="{{ id }}-{{ newsletter.honeypot }}" name="{{ newsletter.honeypot }}" tabindex="-1" autocomplete="off">
     </div>
 
+    {% if newsletter.captcha %}
+        <div class="newsletter-field newsletter-captcha">
+            {{ newsletter.captcha }}
+            {% if form.hasErrors('captcha') %}<span class="newsletter-error" role="alert">{{ form.getFirstError('captcha') }}</span>{% endif %}
+        </div>
+    {% endif %}
+
     <p><button type="submit">{{ options.button ?? 'Subscribe'|t('newsletter') }}</button></p>
 </form>
 {% endautoescape %}

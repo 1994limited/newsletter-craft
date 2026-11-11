@@ -18,6 +18,7 @@ use craft\services\UserPermissions;
 use craft\web\twig\variables\CraftVariable;
 use craft\web\UrlManager;
 use craft\web\View;
+use NineteenNinetyFour\Captcha\Captchas;
 use nineteenninetyfour\newsletter\elements\Subscriber;
 use nineteenninetyfour\newsletter\events\SubscriberEvent;
 use nineteenninetyfour\newsletter\models\Settings;
@@ -143,7 +144,25 @@ class Plugin extends BasePlugin
         return Craft::$app->getView()->renderTemplate('newsletter/_settings', [
             'settings' => $this->getSettings(),
             'overridden' => array_keys(Craft::$app->getConfig()->getConfigFromFile(self::HANDLE)),
+            'captchaOptions' => $this->captchaOptions(),
         ]);
+    }
+
+    /**
+     * The captchas to choose from, and a class of your own when the config sets one.
+     *
+     * @return array<string, string>
+     */
+    protected function captchaOptions(): array
+    {
+        $options = ['' => Craft::t(self::HANDLE, 'None')] + Captchas::LABELS;
+        $current = $this->getSettings()->captcha;
+
+        if ($current !== '' && ! isset($options[$current])) {
+            $options[$current] = $current;
+        }
+
+        return $options;
     }
 
     protected function registerEmails(): void

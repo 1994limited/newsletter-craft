@@ -6,6 +6,7 @@ use Craft;
 use craft\web\Controller;
 use craft\web\View;
 use nineteenninetyfour\newsletter\elements\Subscriber;
+use nineteenninetyfour\newsletter\FormCaptcha;
 use nineteenninetyfour\newsletter\models\SubscribeForm;
 use nineteenninetyfour\newsletter\Plugin;
 use nineteenninetyfour\newsletter\services\SubscriberException;
@@ -71,6 +72,16 @@ class SubscribeController extends Controller
         ]);
 
         if (! $form->validate()) {
+            return $this->failed($form);
+        }
+
+        // Checked last: a captcha token can be checked only once, and a form
+        // with mistakes in it needn't cost a request to the provider.
+        $captcha = FormCaptcha::make();
+
+        if ($captcha && ! $captcha->verify($this->text($captcha->field(), 8192), $request->getUserIP())) {
+            $form->addError('captcha', Craft::t('newsletter', 'We couldn’t check you’re not a robot. Please try again.'));
+
             return $this->failed($form);
         }
 
