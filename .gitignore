@@ -1,0 +1,13 @@
+.DS_Store
+/vendor
+/node_modules
+composer.lock
+.phpunit.cache
+/tests/.env
+/tests/_output
+/tests/_support/_generated
+/tests/_craft/storage
+/tests/_craft/config/project
+/tests/_craft/web/uploads
+/tests/_craft/web/reviews
+/tests/_craft/web/cpresources
