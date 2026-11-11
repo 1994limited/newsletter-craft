@@ -29,6 +29,22 @@ class Settings extends Model
     /** A hidden field that only bots fill in. */
     public string $honeypot = 'website';
 
+    /**
+     * A captcha on the form: "turnstile", "hcaptcha", "recaptcha" (v2),
+     * "recaptcha_v3", or a class implementing NineteenNinetyFour\Captcha\Captcha.
+     * Empty for none. Captchas need JavaScript.
+     */
+    public string $captcha = '';
+
+    /** The captcha's site key: an environment variable ($NAME) or the key. */
+    public string $captchaSiteKey = '';
+
+    /** The captcha's secret key: best kept in an environment variable ($NAME). */
+    public string $captchaSecretKey = '';
+
+    /** reCAPTCHA v3 only: the lowest score taken as a person, 0 to 1. */
+    public float $captchaScore = 0.5;
+
     /** Sign-ups a minute from one visitor (by IP address). */
     public int $throttle = 10;
 
@@ -67,6 +83,8 @@ class Settings extends Model
             [['honeypot'], 'match', 'pattern' => '/^[A-Za-z][A-Za-z0-9_-]*$/'],
             [['confirmedUrl', 'unsubscribedUrl', 'consentText'], 'string'],
             [['askName', 'requireName'], 'boolean'],
+            [['captcha', 'captchaSiteKey', 'captchaSecretKey'], 'string'],
+            [['captchaScore'], 'number', 'min' => 0, 'max' => 1],
             [['notify'], 'each', 'rule' => ['email']],
         ];
     }

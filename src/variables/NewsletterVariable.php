@@ -6,6 +6,7 @@ use Craft;
 use craft\web\View;
 use nineteenninetyfour\newsletter\elements\db\SubscriberQuery;
 use nineteenninetyfour\newsletter\elements\Subscriber;
+use nineteenninetyfour\newsletter\FormCaptcha;
 use nineteenninetyfour\newsletter\models\SubscribeForm;
 use nineteenninetyfour\newsletter\Plugin;
 use Twig\Markup;
@@ -51,6 +52,18 @@ class NewsletterVariable
         $message = Craft::$app->getSession()->getFlash(Plugin::HANDLE);
 
         return is_string($message) && $message !== '' ? $message : null;
+    }
+
+    /**
+     * {{ craft.newsletter.captcha }}: the captcha's widget and script, for a
+     * form of your own (the ready-made form has it already). Null without a
+     * captcha.
+     */
+    public function getCaptcha(): ?Markup
+    {
+        $widget = FormCaptcha::make()?->widget();
+
+        return $widget !== null ? new Markup($widget, 'UTF-8') : null;
     }
 
     public function getConsentText(): string

@@ -7,6 +7,7 @@ use Craft;
 use craft\elements\User;
 use craft\web\TemplateResponseBehavior;
 use nineteenninetyfour\newsletter\elements\Subscriber;
+use nineteenninetyfour\newsletter\http\CaptchaClient;
 use nineteenninetyfour\newsletter\Plugin;
 use UnitTester;
 use yii\web\Response;
@@ -35,7 +36,12 @@ abstract class TestCase extends Unit
             'unsubscribedUrl' => '',
             'pruneDays' => 30,
             'notify' => [],
+            'captcha' => '',
+            'captchaSiteKey' => '',
+            'captchaSecretKey' => '',
+            'captchaScore' => 0.5,
         ]);
+        Craft::$container->clear(CaptchaClient::class);
     }
 
     protected function _after(): void

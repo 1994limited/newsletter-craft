@@ -12,7 +12,7 @@ Newsletter doesn't send newsletters. It keeps a clean, consented list, and hands
 - **The list in the control panel.** Subscribed, waiting to confirm and unsubscribed, searchable and sortable, with Craft's own bulk delete.
 - **CSV export.** A Download CSV button (subscribed, waiting, unsubscribed or everyone), and the list in Craft's own Export… menu too. Each row carries the subscriber's own unsubscribe link, to merge into the emails you send. Cells can't be read as spreadsheet formulas.
 - **Unsubscribe links** that work with mail apps' one-click unsubscribe.
-- **No leaks, little spam.** The form says the same thing whether an address is new or already subscribed. A hidden honeypot field, a limit on sign-ups per visitor and a limit on confirmation emails per address.
+- **No leaks, little spam.** The form says the same thing whether an address is new or already subscribed. A hidden honeypot field, a limit on sign-ups per visitor and a limit on confirmation emails per address, and a captcha if you want one: Cloudflare Turnstile, hCaptcha, reCAPTCHA v2 or v3, or your own.
 - **Tidy.** Sign-ups nobody confirmed are deleted after 30 days.
 - **Your wording.** The confirmation email is a system message (Utilities → System Messages), in each site's language. Anyone can be told about new subscribers by email.
 
@@ -124,6 +124,23 @@ return [
     'honeypot' => 'website',
 ];
 ```
+
+## Captcha
+
+The hidden field and limits stop most bots. For more, choose a captcha under Settings → Plugins → Newsletter: Cloudflare Turnstile, hCaptcha, Google reCAPTCHA v2 (the checkbox) or v3 (scored, nothing to tick), with its site key and secret key. Keep the keys in environment variables (`$NEWSLETTER_CAPTCHA_SECRET`) so they aren't saved in project config. Or in `config/newsletter.php`:
+
+```php
+'captcha' => 'turnstile',   // hcaptcha, recaptcha, recaptcha_v3
+'captchaSiteKey' => '$NEWSLETTER_CAPTCHA_SITE_KEY',
+'captchaSecretKey' => '$NEWSLETTER_CAPTCHA_SECRET',
+'captchaScore' => 0.5,      // reCAPTCHA v3: the lowest score let through
+```
+
+It's off until a captcha and both keys are set. Captchas need JavaScript, so with one on, the form no longer works without it.
+
+The ready-made form shows it above its button. In a form of your own (or a copy of `form.twig` made before captchas), add `{{ craft.newsletter.captcha }}` where it should go, and `form.getFirstError('captcha')` for its message; without it, sign-ups are refused. A failed check answers `errors.captcha` in JSON.
+
+Your own: set `'captcha'` in `config/newsletter.php` to a class implementing `NineteenNinetyFour\Captcha\Captcha` (from [1994/captcha](https://github.com/1994limited/captcha)).
 
 ## Events
 

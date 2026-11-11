@@ -130,3 +130,55 @@
     disabled: 'honeypot' in overridden,
     warning: 'honeypot' in overridden ? configNote : null,
 }) }}
+
+{{ forms.selectField({
+    label: 'Captcha'|t('newsletter'),
+    instructions: 'On the form, as well as the hidden field and limits above. Captchas need JavaScript, so with one on, the form no longer works without it.'|t('newsletter'),
+    name: 'captcha',
+    value: settings.captcha,
+    options: captchaOptions,
+    toggle: true,
+    targetPrefix: 'newsletter-captcha-',
+    disabled: 'captcha' in overridden,
+    warning: 'captcha' in overridden ? configNote : null,
+}) }}
+
+<div>
+    {{ forms.autosuggestField({
+        label: 'Site key'|t('newsletter'),
+        name: 'captchaSiteKey',
+        value: settings.captchaSiteKey,
+        suggestEnvVars: true,
+        class: 'code',
+        disabled: 'captchaSiteKey' in overridden,
+        warning: 'captchaSiteKey' in overridden ? configNote : null,
+    }) }}
+
+    {{ forms.autosuggestField({
+        label: 'Secret key'|t('newsletter'),
+        instructions: 'Best as an environment variable, such as `$NEWSLETTER_CAPTCHA_SECRET`, so it isn’t saved in your project config.'|t('newsletter'),
+        name: 'captchaSecretKey',
+        value: settings.captchaSecretKey,
+        suggestEnvVars: true,
+        class: 'code',
+        disabled: 'captchaSecretKey' in overridden,
+        warning: 'captchaSecretKey' in overridden ? configNote : null,
+    }) }}
+</div>
+
+<div id="newsletter-captcha-recaptcha_v3"{% if settings.captcha != 'recaptcha_v3' %} class="hidden"{% endif %}>
+    {{ forms.textField({
+        label: 'Lowest score let through'|t('newsletter'),
+        instructions: 'reCAPTCHA v3 scores each visit from 0 (a bot) to 1 (a person).'|t('newsletter'),
+        name: 'captchaScore',
+        value: settings.captchaScore,
+        type: 'number',
+        min: 0,
+        max: 1,
+        step: 0.1,
+        size: 5,
+        errors: settings.getErrors('captchaScore'),
+        disabled: 'captchaScore' in overridden,
+        warning: 'captchaScore' in overridden ? configNote : null,
+    }) }}
+</div>

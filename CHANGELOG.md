@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+### Added
+- A captcha on the form, if you want one: Cloudflare Turnstile, hCaptcha, reCAPTCHA v2 or v3, chosen in the plugin's settings, or your own. `{{ craft.newsletter.captcha }}` for forms of your own.
+
 ### Changed
 - The confirm, unsubscribe and expired-link pages can be replaced with `templates/_newsletter/page.twig`, like the form.
 
