@@ -6,7 +6,8 @@ composer.lock
 /tests/.env
 /tests/_output
 /tests/_support/_generated
-/tests/_craft/storage
+/tests/_craft/storage/*
+!/tests/_craft/storage/.gitkeep
 /tests/_craft/config/project
 /tests/_craft/web/uploads
 /tests/_craft/web/reviews

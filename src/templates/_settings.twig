@@ -1,0 +1,132 @@
+{#
+    Settings → Plugins → Newsletter. Saved to Project Config.
+#}
+{% import '_includes/forms' as forms %}
+{% set configNote = 'Set in config/newsletter.php.'|t('newsletter') %}
+
+<p>{{ 'The confirmation email’s wording is in <a href="{url}">Utilities → System Messages</a>.'|t('newsletter', { url: cpUrl('utilities/system-messages') })|raw }}</p>
+
+<h2>{{ 'The form'|t('newsletter') }}</h2>
+
+{{ forms.textareaField({
+    label: 'Consent wording'|t('newsletter'),
+    instructions: 'Next to a tick box people must tick. Saved with each sign-up, as a record of what they agreed to. Leave empty for no tick box.'|t('newsletter'),
+    name: 'consentText',
+    value: settings.consentText,
+    rows: 2,
+    disabled: 'consentText' in overridden,
+    warning: 'consentText' in overridden ? configNote : null,
+}) }}
+
+{{ forms.lightswitchField({
+    label: 'Ask for a name'|t('newsletter'),
+    name: 'askName',
+    on: settings.askName,
+    toggle: 'newsletter-require-name',
+    disabled: 'askName' in overridden,
+    warning: 'askName' in overridden ? configNote : null,
+}) }}
+
+<div id="newsletter-require-name"{% if not settings.askName %} class="hidden"{% endif %}>
+    {{ forms.lightswitchField({
+        label: 'Name is required'|t('newsletter'),
+        name: 'requireName',
+        on: settings.requireName,
+        disabled: 'requireName' in overridden,
+        warning: 'requireName' in overridden ? configNote : null,
+    }) }}
+</div>
+
+<h2>{{ 'Confirming'|t('newsletter') }}</h2>
+
+{{ forms.textField({
+    label: 'Links last (hours)'|t('newsletter'),
+    instructions: 'How long the link in the confirmation email works.'|t('newsletter'),
+    name: 'confirmHours',
+    value: settings.confirmHours,
+    type: 'number',
+    min: 1,
+    size: 5,
+    errors: settings.getErrors('confirmHours'),
+    disabled: 'confirmHours' in overridden,
+    warning: 'confirmHours' in overridden ? configNote : null,
+}) }}
+
+{{ forms.textField({
+    label: 'After confirming, go to'|t('newsletter'),
+    instructions: 'A page on your site, such as /newsletter/thanks, with the message in `craft.newsletter.success`. Leave empty for Newsletter’s own page.'|t('newsletter'),
+    name: 'confirmedUrl',
+    value: settings.confirmedUrl,
+    class: 'code',
+    disabled: 'confirmedUrl' in overridden,
+    warning: 'confirmedUrl' in overridden ? configNote : null,
+}) }}
+
+{{ forms.textField({
+    label: 'After unsubscribing, go to'|t('newsletter'),
+    name: 'unsubscribedUrl',
+    value: settings.unsubscribedUrl,
+    class: 'code',
+    disabled: 'unsubscribedUrl' in overridden,
+    warning: 'unsubscribedUrl' in overridden ? configNote : null,
+}) }}
+
+{{ forms.textField({
+    label: 'Delete unconfirmed sign-ups after (days)'|t('newsletter'),
+    instructions: 'Sign-ups nobody confirmed are deleted when Craft tidies up. 0 keeps them.'|t('newsletter'),
+    name: 'pruneDays',
+    value: settings.pruneDays,
+    type: 'number',
+    min: 0,
+    size: 5,
+    errors: settings.getErrors('pruneDays'),
+    disabled: 'pruneDays' in overridden,
+    warning: 'pruneDays' in overridden ? configNote : null,
+}) }}
+
+{{ forms.textField({
+    label: 'Tell these people about new subscribers'|t('newsletter'),
+    instructions: 'Email addresses, separated by commas, emailed each time a sign-up is confirmed.'|t('newsletter'),
+    name: 'notify',
+    value: settings.notify|join(', '),
+    disabled: 'notify' in overridden,
+    warning: 'notify' in overridden ? configNote : null,
+}) }}
+
+<h2>{{ 'Spam'|t('newsletter') }}</h2>
+
+{{ forms.textField({
+    label: 'Sign-ups a minute, per visitor'|t('newsletter'),
+    name: 'throttle',
+    value: settings.throttle,
+    type: 'number',
+    min: 1,
+    size: 5,
+    errors: settings.getErrors('throttle'),
+    disabled: 'throttle' in overridden,
+    warning: 'throttle' in overridden ? configNote : null,
+}) }}
+
+{{ forms.textField({
+    label: 'Confirmation emails an hour, per address'|t('newsletter'),
+    instructions: 'So the form can’t be used to flood someone’s inbox.'|t('newsletter'),
+    name: 'perEmail',
+    value: settings.perEmail,
+    type: 'number',
+    min: 1,
+    size: 5,
+    errors: settings.getErrors('perEmail'),
+    disabled: 'perEmail' in overridden,
+    warning: 'perEmail' in overridden ? configNote : null,
+}) }}
+
+{{ forms.textField({
+    label: 'Hidden field name'|t('newsletter'),
+    instructions: 'A field people can’t see. Forms that fill it in are quietly dropped. Change it if it clashes with a field of yours.'|t('newsletter'),
+    name: 'honeypot',
+    value: settings.honeypot,
+    class: 'code',
+    errors: settings.getErrors('honeypot'),
+    disabled: 'honeypot' in overridden,
+    warning: 'honeypot' in overridden ? configNote : null,
+}) }}

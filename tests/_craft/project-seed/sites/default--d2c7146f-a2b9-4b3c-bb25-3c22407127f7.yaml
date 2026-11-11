@@ -1,0 +1,8 @@
+baseUrl: 'https://www.dogear.test/'
+handle: default
+hasUrls: true
+language: en-GB
+name: 'Dog-ear Books'
+primary: true
+siteGroup: ddf8e533-95fe-41ba-88c0-6b4d8aebaf31 # Dog-ear Books
+sortOrder: 1

@@ -1,0 +1,22 @@
+dateModified: 1792272795
+email:
+  fromEmail: hello@dogear.test
+  fromName: 'Dog-ear Books'
+  transportType: craft\mail\transportadapters\Sendmail
+meta:
+  __names__:
+    d2c7146f-a2b9-4b3c-bb25-3c22407127f7: 'Dog-ear Books' # Dog-ear Books
+    ddf8e533-95fe-41ba-88c0-6b4d8aebaf31: 'Dog-ear Books' # Dog-ear Books
+system:
+  edition: pro
+  live: true
+  name: 'Dog-ear Books'
+  schemaVersion: 5.12.0.2
+  timeZone: Europe/London
+users:
+  allowPublicRegistration: false
+  defaultGroup: null
+  photoSubpath: null
+  photoVolumeUid: null
+  require2fa: false
+  requireEmailVerification: true
