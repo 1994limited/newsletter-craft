@@ -213,7 +213,8 @@ class Subscriber extends Element
             Craft::t('newsletter', 'Confirmed') => $format($this->dateConfirmed),
             Craft::t('newsletter', 'Unsubscribed') => $format($this->dateUnsubscribed),
             Craft::t('newsletter', 'Agreed to') => Html::encode($this->consent ?? '—'),
-            Craft::t('newsletter', 'Form page') => $this->sourceUrl ? Html::a(Html::encode($this->sourceUrl), $this->sourceUrl, ['target' => '_blank', 'rel' => 'noopener']) : '—',
+            // From the visitor's Referer header: a link only if it's a web address.
+            Craft::t('newsletter', 'Form page') => $this->sourceUrl && preg_match('#^https?://#i', $this->sourceUrl) ? Html::a(Html::encode($this->sourceUrl), $this->sourceUrl, ['target' => '_blank', 'rel' => 'noopener']) : Html::encode($this->sourceUrl ?? '—'),
         ];
     }
 

@@ -278,9 +278,14 @@ class SubscribeTest extends TestCase
         $recent = $this->pending('recent@example.com');
         $kept = $this->subscribed('kept@example.com');
 
-        foreach ([$old, $kept] as $subscriber) {
-            Db::update('{{%elements}}', ['dateCreated' => Db::prepareDateForDb(new DateTime('-40 days'))], ['id' => $subscriber->id]);
+        $again = $this->pending('again@example.com');
+
+        foreach ([$old, $kept, $again] as $subscriber) {
+            Db::update('{{%elements}}', ['dateCreated' => Db::prepareDateForDb(new DateTime('-40 days')), 'dateUpdated' => Db::prepareDateForDb(new DateTime('-40 days'))], ['id' => $subscriber->id]);
         }
+
+        // Signing up again starts the wait again.
+        $this->signUp('again@example.com');
 
         $this->assertSame(1, $this->plugin()->subscribers->prune());
 
@@ -288,6 +293,7 @@ class SubscribeTest extends TestCase
         $this->assertFalse((new Query)->from(Install::SUBSCRIBERS)->where(['id' => $old->id])->exists());
         $this->assertNotNull($this->subscriber('recent@example.com'));
         $this->assertNotNull($this->subscriber('kept@example.com'));
+        $this->assertNotNull($this->subscriber('again@example.com'));
 
         $this->settings(['pruneDays' => 0]);
         $this->assertSame(0, $this->plugin()->subscribers->prune());
@@ -309,5 +315,20 @@ class SubscribeTest extends TestCase
 
         // Sites that edit the wording can use the subscriber too.
         $this->assertSame('reader@example.com Ada Reader pending', $view->renderSandboxedString('{{ subscriber.email }} {{ subscriber.name }} {{ subscriber.status }}', ['subscriber' => $subscriber]));
+    }
+
+    public function test_the_form_page_is_only_a_link_when_it_s_a_web_address(): void
+    {
+        // It comes from the visitor's Referer header.
+        $subscriber = $this->plugin()->subscribers->subscribe('reader@example.com', sourceUrl: 'javascript:alert(document.cookie)');
+        $subscriber = $this->subscriber();
+        $html = implode(' ', (fn () => $this->metadata())->call($subscriber));
+
+        $this->assertStringNotContainsString('href="javascript:', $html);
+        $this->assertStringContainsString('javascript:alert(document.cookie)', $html);
+
+        $this->plugin()->subscribers->subscribe('other@example.com', sourceUrl: 'https://www.dogear.test/books');
+        $html = implode(' ', (fn () => $this->metadata())->call($this->subscriber('other@example.com')));
+        $this->assertStringContainsString('href="https://www.dogear.test/books"', $html);
     }
 }

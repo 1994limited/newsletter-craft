@@ -247,7 +247,8 @@ class Subscribers extends Component
         $before = (new DateTime)->modify("-{$days} days");
         $deleted = 0;
 
-        foreach (Subscriber::find()->status(Subscriber::STATUS_PENDING)->dateCreated('< '.Db::prepareDateForDb($before))->each() as $subscriber) {
+        // dateUpdated: signing up again starts the wait again.
+        foreach (Subscriber::find()->status(Subscriber::STATUS_PENDING)->dateUpdated('< '.Db::prepareDateForDb($before))->each() as $subscriber) {
             /** @var Subscriber $subscriber */
             if (Craft::$app->getElements()->deleteElement($subscriber, true)) {
                 $deleted++;
