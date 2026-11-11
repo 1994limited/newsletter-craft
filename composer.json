@@ -1,0 +1,77 @@
+{
+    "name": "1994/newsletter-craft",
+    "description": "Newsletter sign-ups for Craft CMS: a form, double opt-in by email, and the list in the control panel, ready to export as CSV.",
+    "type": "craft-plugin",
+    "license": "proprietary",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "newsletter",
+        "mailing list",
+        "subscribers",
+        "double opt-in",
+        "csv"
+    ],
+    "authors": [
+        {
+            "name": "1994",
+            "email": "hello@1994.co.uk",
+            "homepage": "https://1994.co.uk"
+        }
+    ],
+    "support": {
+        "email": "hello@1994.co.uk",
+        "docs": "https://github.com/1994limited/newsletter-craft/blob/main/README.md",
+        "issues": "https://github.com/1994limited/newsletter-craft/issues",
+        "source": "https://github.com/1994limited/newsletter-craft"
+    },
+    "require": {
+        "php": "^8.2",
+        "craftcms/cms": "^5.6"
+    },
+    "require-dev": {
+        "codeception/codeception": "^5.2",
+        "codeception/module-asserts": "^3.0",
+        "codeception/module-yii2": "^1.1.9",
+        "craftcms/phpstan": "dev-main",
+        "laravel/pint": "^1.18",
+        "phpstan/phpstan": "^2.1",
+        "vlucas/phpdotenv": "^5.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "nineteenninetyfour\\newsletter\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "nineteenninetyfour\\newsletter\\tests\\": "tests/"
+        }
+    },
+    "extra": {
+        "handle": "newsletter",
+        "name": "Newsletter",
+        "developer": "1994",
+        "developerUrl": "https://1994.co.uk",
+        "documentationUrl": "https://github.com/1994limited/newsletter-craft/blob/main/README.md",
+        "class": "nineteenninetyfour\\newsletter\\Plugin",
+        "changelogUrl": "https://raw.githubusercontent.com/1994limited/newsletter-craft/main/CHANGELOG.md"
+    },
+    "config": {
+        "sort-packages": true,
+        "platform": {
+            "php": "8.2"
+        },
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true,
+            "craftcms/plugin-installer": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "scripts": {
+        "test": "codecept run"
+    }
+}

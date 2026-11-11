@@ -1,0 +1,19 @@
+{% extends '_layouts/elementindex' %}
+{% set title = 'Newsletter'|t('newsletter') %}
+{% set elementType = 'nineteenninetyfour\\newsletter\\elements\\Subscriber' %}
+{% set showSiteMenu = false %}
+
+{% block actionButton %}
+    <div class="btngroup">
+        <a class="btn submit" data-icon="download" href="{{ cpUrl('newsletter/export') }}">{{ 'Download CSV'|t('newsletter') }}</a>
+        <button type="button" class="btn submit menubtn" aria-label="{{ 'More ways to download'|t('newsletter') }}"></button>
+        <div class="menu" data-align="right">
+            <ul>
+                <li><a href="{{ cpUrl('newsletter/export') }}">{{ 'Subscribed (confirmed)'|t('newsletter') }}</a></li>
+                <li><a href="{{ cpUrl('newsletter/export', { status: 'pending' }) }}">{{ 'Waiting to confirm'|t('newsletter') }}</a></li>
+                <li><a href="{{ cpUrl('newsletter/export', { status: 'unsubscribed' }) }}">{{ 'Unsubscribed'|t('newsletter') }}</a></li>
+                <li><a href="{{ cpUrl('newsletter/export', { status: 'all' }) }}">{{ 'Everyone'|t('newsletter') }}</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}

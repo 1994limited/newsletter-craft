@@ -1,0 +1,59 @@
+{#
+    The ready-made sign-up form: {{ craft.newsletter.form() }}
+
+    To change it, copy this file to templates/_newsletter/form.twig in your
+    site and edit it there. Options:
+        redirect     where to go afterwards (default: back to this page)
+        button       the button's text
+        placeholder  the email field's placeholder
+        id           the form's id (default: newsletter)
+        class        the form's class (default: newsletter)
+#}
+{# Escaped however it's rendered (renderString() turns escaping off). #}
+{% autoescape 'html' %}
+{% set form = newsletter.getForm() %}
+{% set success = newsletter.success %}
+{% set id = options.id ?? 'newsletter' %}
+
+<form method="post" accept-charset="UTF-8" id="{{ id }}" class="{{ options.class ?? 'newsletter' }}" novalidate>
+    {{ csrfInput() }}
+    {{ actionInput('newsletter/subscribe') }}
+    {% if options.redirect is defined %}{{ redirectInput(options.redirect) }}{% endif %}
+
+    {% if success %}
+        <p class="newsletter-success" role="status">{{ success }}</p>
+    {% endif %}
+
+    {% if newsletter.askName %}
+        <p class="newsletter-field">
+            <label for="{{ id }}-name">{{ 'Name'|t('newsletter') }}{% if not newsletter.requireName %} <span class="newsletter-optional">({{ 'optional'|t('newsletter') }})</span>{% endif %}</label>
+            <input type="text" id="{{ id }}-name" name="name" value="{{ form.name }}" autocomplete="name" maxlength="255"{% if newsletter.requireName %} required{% endif %}{% if form.hasErrors('name') %} aria-invalid="true" aria-describedby="{{ id }}-name-error"{% endif %}>
+            {% if form.hasErrors('name') %}<span class="newsletter-error" id="{{ id }}-name-error">{{ form.getFirstError('name') }}</span>{% endif %}
+        </p>
+    {% endif %}
+
+    <p class="newsletter-field">
+        <label for="{{ id }}-email">{{ 'Email address'|t('newsletter') }}</label>
+        <input type="email" id="{{ id }}-email" name="email" value="{{ form.email }}" autocomplete="email" maxlength="254" required placeholder="{{ options.placeholder ?? '' }}"{% if form.hasErrors('email') %} aria-invalid="true" aria-describedby="{{ id }}-email-error"{% endif %}>
+        {% if form.hasErrors('email') %}<span class="newsletter-error" id="{{ id }}-email-error">{{ form.getFirstError('email') }}</span>{% endif %}
+    </p>
+
+    {% if newsletter.consentText %}
+        <p class="newsletter-field newsletter-consent">
+            <label>
+                <input type="checkbox" name="consent" value="1"{% if form.consent %} checked{% endif %} required{% if form.hasErrors('consent') %} aria-invalid="true" aria-describedby="{{ id }}-consent-error"{% endif %}>
+                {{ newsletter.consentText }}
+            </label>
+            {% if form.hasErrors('consent') %}<span class="newsletter-error" id="{{ id }}-consent-error">{{ form.getFirstError('consent') }}</span>{% endif %}
+        </p>
+    {% endif %}
+
+    {# Hidden from people; bots fill it in, and their sign-ups are dropped. #}
+    <div aria-hidden="true" style="position:absolute; left:-10000px; width:1px; height:1px; overflow:hidden;">
+        <label for="{{ id }}-{{ newsletter.honeypot }}">{{ 'Leave this empty'|t('newsletter') }}</label>
+        <input type="text" id="{{ id }}-{{ newsletter.honeypot }}" name="{{ newsletter.honeypot }}" tabindex="-1" autocomplete="off">
+    </div>
+
+    <p><button type="submit">{{ options.button ?? 'Subscribe'|t('newsletter') }}</button></p>
+</form>
+{% endautoescape %}
