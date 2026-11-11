@@ -217,14 +217,15 @@ class SubscribeController extends Controller
             ->set('Cache-Control', 'no-store, private')
             ->set('X-Robots-Tag', 'noindex');
 
-        return $this->renderTemplate('newsletter/_page', [
+        // templates/_newsletter/page.twig in the site replaces it.
+        return $this->renderTemplate('_newsletter/page', [
             'title' => $title,
             'message' => $message,
             'form' => $form,
             'siteName' => $site->getName(),
             'siteUrl' => $site->getBaseUrl() ?? '/',
             'language' => $site->language,
-        ], View::TEMPLATE_MODE_CP);
+        ], View::TEMPLATE_MODE_SITE);
     }
 
     protected function text(string $name, int $max): string
