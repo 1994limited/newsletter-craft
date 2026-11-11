@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+- The confirm, unsubscribe and expired-link pages can be replaced with `templates/_newsletter/page.twig`, like the form.
+
 ## 1.0.0 - 2026-11-11
 
 ### Added

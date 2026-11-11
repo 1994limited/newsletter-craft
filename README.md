@@ -79,7 +79,9 @@ On a page cached with Blitz or `{% cache %}`, the CSRF token and messages are ca
 
 ## Confirming and unsubscribing
 
-The confirmation link and each subscriber's unsubscribe link open a small page of Newsletter's own, with a button. To use pages of your own instead, set **After confirming, go to** and **After unsubscribing, go to** under Settings → Plugins → Newsletter; the message is in `craft.newsletter.success`.
+The confirmation link and each subscriber's unsubscribe link open a small page with a button (and a "link expired" page when it's too late). To restyle it, copy `vendor/1994/newsletter-craft/src/templates/_site/page.twig` to `templates/_newsletter/page.twig` and edit it there; it can extend your own layout. Its variables are listed at the top of the file.
+
+To send people to pages of your own once they've confirmed or unsubscribed, set **After confirming, go to** and **After unsubscribing, go to** under Settings → Plugins → Newsletter; the message is in `craft.newsletter.success`.
 
 The unsubscribe link is in the CSV (**Unsubscribe link**), and on each subscriber as `subscriber.unsubscribeUrl`. Put it in the emails you send, and in a `List-Unsubscribe` header for one-click unsubscribe.
 

@@ -1,8 +1,17 @@
 {#
     The page people land on from the links in the emails (confirm,
-    unsubscribe), unless the settings send them to one of your own. It's a
-    page of its own, outside the control panel.
+    unsubscribe, a link that's expired), unless the settings send them to
+    one of your own once they're done.
+
+    To change it, copy this file to templates/_newsletter/page.twig in your
+    site and edit it there, or extend your own layout. Variables:
+        title, message   what to say
+        form             null, or { button, params }: a POST to this same
+                         URL with params as hidden fields does the action
+        siteName, siteUrl, language
 #}
+{# Escaped however it's rendered. #}
+{% autoescape 'html' %}
 <!DOCTYPE html>
 <html lang="{{ language }}">
 <head>
@@ -44,3 +53,4 @@
 </main>
 </body>
 </html>
+{% endautoescape %}
